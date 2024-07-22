@@ -3,12 +3,13 @@ https://medium.com/inspiredbrilliance/implementing-authentication-in-next-js-v13
 
 
 ### Config dev
+```bash
 cd backend
 mv .env.template .env
 
 cd fronend
 mv .env.template .env
-
+```
 ### Local para levantar front leyendo el .env del proyecto frontend
 
 - `docker-compose -f docker-compose-frontend.env.yml build`
