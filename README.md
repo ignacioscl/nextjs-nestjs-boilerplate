@@ -64,18 +64,18 @@ docker-compose -f docker-compose-frontend.yml up -d
 
 
 #### Example
-  export BACKEND_BASE_URL=http://192.168.1.3:5000
-  export AUTH_KEYCLOAK_ID=
-  export AUTH_KEYCLOAK_SECRET=
-  export AUTH_KEYCLOAK_ISSUER=
-  export AUTH_SECRET=
-  export AUTH_URL=http://localhost:3000
-  export AUTH_TRUST_HOST=http://localhost:3000
-  export PUBLIC_URL=/
+	export BACKEND_BASE_URL=http://192.168.1.3:5000
+	export AUTH_KEYCLOAK_ID=
+	export AUTH_KEYCLOAK_SECRET=
+	export AUTH_KEYCLOAK_ISSUER=
+	export AUTH_SECRET=
+	export AUTH_URL=http://localhost:3000
+	export AUTH_TRUST_HOST=http://localhost:3000
+	export PUBLIC_URL=/
 
 
-  docker-compose -f docker-compose-frontend.yml build 
-  docker-compose -f docker-compose-frontend.yml up
+	docker-compose -f docker-compose-frontend.yml build 
+	docker-compose -f docker-compose-frontend.yml up
 
 
 
