@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        BACKEND_BASE_URL: ${BACKEND_BASE_URL}
+        AUTH_KEYCLOAK_ID: ${AUTH_KEYCLOAK_ID}
+        AUTH_KEYCLOAK_SECRET: ${AUTH_KEYCLOAK_SECRET}
+        AUTH_KEYCLOAK_ISSUER: ${AUTH_KEYCLOAK_ISSUER}
+        AUTH_SECRET: ${AUTH_SECRET}
+        AUTH_URL: ${AUTH_URL}
+        AUTH_TRUST_HOST: ${AUTH_TRUST_HOST}
+        PUBLIC_URL: ${PUBLIC_URL}
+    environment:
+        BACKEND_BASE_URL: ${BACKEND_BASE_URL}
+        AUTH_KEYCLOAK_ID: ${AUTH_KEYCLOAK_ID}
+        AUTH_KEYCLOAK_SECRET: ${AUTH_KEYCLOAK_SECRET}
+        AUTH_KEYCLOAK_ISSUER: ${AUTH_KEYCLOAK_ISSUER}
+        AUTH_SECRET: ${AUTH_SECRET}
+        AUTH_URL: ${AUTH_URL}
+        AUTH_TRUST_HOST: ${AUTH_TRUST_HOST}
+        PUBLIC_URL: ${PUBLIC_URL}
+    ports:
+      - 3000:3000
+    restart: always

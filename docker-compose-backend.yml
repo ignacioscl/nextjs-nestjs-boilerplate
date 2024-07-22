@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  backend:
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000 # Cambia este puerto si tu backend usa uno diferente
+    restart: always
+    environment:
+      NODE_ENV: production
+    volumes:
+      - ./backend_conf/.env.backend.production:/app/.env # Configura según tu servidor
