@@ -1,3 +1,33 @@
+# Boilerplate Template
+
+this project provides a boilerplate template for building a full-stack application with the following technologies:
+
+**Frontend**:
+
+Built with Next.js, providing a modern, scalable front-end framework.
+Configured with **Keycloak** for authentication, managing user sessions and authorization.
+Uses a proxy to handle API calls to the backend and include authorization headers.
+
+**Backend**:
+
+Powered by NestJS, a powerful Node.js framework for building efficient and scalable server-side applications.
+Integrates with **TypeORM** for seamless database interactions.
+
+Data is dynamically loaded from the backend into tables on the front end.
+
+**Swagger** is included for interactive API documentation and testing.
+**Class Validator** is used for robust input validation and data integrity.
+
+**Authentication**:
+
+Implemented using Keycloak, enabling robust and secure user management and authentication.
+
+Proxy Setup:
+
+Configured to proxy API requests to the backend, automatically including authorization headers for secure communication.
+
+This template is designed to provide a solid foundation for developing applications with modern technologies, offering a streamlined setup for both front-end and back-end development, secure authentication, efficient data handling, interactive API documentation, and robust input validation.
+
 ### Setting keycloak
 https://medium.com/inspiredbrilliance/implementing-authentication-in-next-js-v13-application-with-keycloak-part-1-f4817c53c7ef
 
