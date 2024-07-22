@@ -10,13 +10,14 @@ mv .env.template .env
 cd fronend
 mv .env.template .env
 ```
-### Local para levantar front leyendo el .env del proyecto frontend
+### Local to start the frontend reading the .env from the frontend project
+
 
 - `docker-compose -f docker-compose-frontend.env.yml build`
 - `docker-compose -f docker-compose-frontend.env.yml up`
 - `docker exec -it <container_name> sh -c 'printenv'`
 
-#### Línea de comanod para rundeck o para ser ejecutado sin .env
+#### Command line for rundeck 
 
 
 docker-compose -f docker-compose-frontend.yml build \
@@ -48,7 +49,7 @@ docker-compose -f docker-compose-frontend.yml up
 
 
 
-### Local para levantar front leyendo de variables de export y backend copiando el .env desde fuera del proyecto
+### Local setup to start the frontend reading from export variables and backend copying the .env from outside the project
 
 export BACKEND_BASE_URL=
 export AUTH_KEYCLOAK_ID=
@@ -63,7 +64,7 @@ docker-compose -f docker-compose-server.yml build
 docker-compose -f docker-compose-server.yml up
 
 
-### Local para levantar backend copiando el .env desde fuera del proyecto
+### Local setup to start the backend by copying the .env from outside the project
 
 
 docker-compose -f docker-compose-backend.yml build 
