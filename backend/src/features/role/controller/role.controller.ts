@@ -31,11 +31,11 @@ import { Role } from '../entity/role.entity'
 import { AuthenticatedUser, Public, RoleMatchingMode, Roles } from 'nest-keycloak-connect'
 
 
-//@Roles({  roles: ["SOLICITAR_CUENTA_CORRIENTE","realm:SOLICITAR_CUENTA_CORRIENTE"], mode: RoleMatchingMode.ANY })
+//@Roles({  roles: ["ADMIN","realm:ADMIN"], mode: RoleMatchingMode.ANY })
 @Controller('/roles')
 @ApiTags('Role')
 @ApiBearerAuth()
-//@Public()
+@Public()
 export class RoleController {
   constructor(@Inject(RoleService) private readonly service: RoleService) {}
 

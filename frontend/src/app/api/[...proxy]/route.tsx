@@ -22,7 +22,7 @@ async function handler(request: NextRequest) {
 
   let backendUrl =
     process.env.BACKEND_BASE_URL || ''
-console.log(backendUrl)
+
   let url = request.nextUrl.href.replace(request.nextUrl.origin, backendUrl)
   /*console.log("url" + url)
   console.log("headers",headers )*/

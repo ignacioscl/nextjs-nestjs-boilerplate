@@ -9,14 +9,14 @@ export class DemoController {
 
   @Get('/getHello')
   @Resource('')
-  @Roles({  roles: ["SOLICITAR_CUENTA_CORRIENTE","realm:SOLICITAR_CUENTA_CORRIENTE"], mode: RoleMatchingMode.ANY })//SOLICITAR_CUENTA_CORRIENTE , ADMIN
+  //@Roles({  roles: ["ADMIN","realm:ADMIN"], mode: RoleMatchingMode.ANY })
   getHello(): string {
     return this.appService.getHello();
   }
 
   @Get('/getUser')
   @Resource('')
-  @Roles({  roles: ["SOLICITAR_CUENTA_CORRIENTE","realm:SOLICITAR_CUENTA_CORRIENTE"], mode: RoleMatchingMode.ANY })//SOLICITAR_CUENTA_CORRIENTE , ADMIN
+  @Roles({  roles: ["ADMIN","realm:ADMIN"], mode: RoleMatchingMode.ANY })
   getUser(@AuthenticatedUser() user: any): string {
     return user;
   }
