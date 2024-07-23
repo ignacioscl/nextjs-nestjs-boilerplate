@@ -43,15 +43,18 @@ import {
   TableHeader,
   TableRow,
 } from "@components/ui/table"
-import Role from "../../../types/role"
+import RoleDto from "../../../types/role/role"
 import { useQuery } from "react-query"
 import {fetchPaginated} from "@lib/fetch/fetch"
 import ApiRequest from "@lib/fetch/api.request"
 import { PaginationDto } from "@lib/pagination/pagination.dto"
+import RoleQueryDto from "@localTypes/role/role.query.dto"
+import { useApiRequest } from "@lib/hooks/api.request"
+import urlFetch, { UrlEnum } from "@lib/url.fetch/url.fetch"
 
 
 
-const data: Role[] = [
+const data: RoleDto[] = [
   {
     id: 1,
     description: "Administrador",
@@ -63,7 +66,7 @@ const data: Role[] = [
 ]
 
 
-export const columns: ColumnDef<Role>[] = [
+export const columns: ColumnDef<RoleDto>[] = [
   
   {
     accessorKey: "id",
@@ -123,7 +126,10 @@ export function RolesTablePaginated() {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
-  const api = new ApiRequest<Role>();
+  const [roleQuery,setRoleQuery] = React.useState<RoleQueryDto>({descriptionLike:""});
+
+  const { getAll, getOne: getById } = useApiRequest<RoleDto,RoleQueryDto>(UrlEnum.ROLE);
+  
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
   const [pagination, setPagination] = React.useState<PaginationState>({
@@ -132,9 +138,9 @@ export function RolesTablePaginated() {
   })
   const defaultData = React.useMemo(() => [], [])
   
-  const dataQuery = useQuery<PaginationDto<Role>>({
-    queryKey: ['data', pagination],
-    queryFn: () => api.fetchPaginated('/api/roles', pagination),
+  const dataQuery = useQuery<PaginationDto<RoleDto>>({
+    queryKey: ['data', pagination,roleQuery],
+    queryFn: () => getAll(pagination,roleQuery),
     placeholderData: keepPreviousData as any
 });
   React.useEffect(() => {
@@ -169,14 +175,15 @@ export function RolesTablePaginated() {
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
-        {/*<Input
+       
+        <Input
           placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          value={roleQuery.descriptionLike ?? ""}
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            setRoleQuery({descriptionLike: event.target.value})
           }
           className="max-w-sm"
-        />*/}
+        />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">

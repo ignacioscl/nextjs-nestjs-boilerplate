@@ -25,6 +25,9 @@ export class RoleRepository extends BaseRepository<Role, RoleQueryDto> {
     if (payload.id){
       query.andWhere('role.id = :id', { id: payload.id })
     }
+    if (payload.descriptionLike){
+      query.andWhere('role.description LIKE :description', { description: '%' + payload.descriptionLike + '%' })
+    }
     if (payload.includeDeleted==1) {
       query.withDeleted();
     }

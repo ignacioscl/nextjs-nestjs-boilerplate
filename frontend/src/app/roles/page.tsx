@@ -14,8 +14,8 @@ const Roles = () => {
   
   return (
     <>
-    <pre>{getUserName()}</pre>
-    {/*<Collapsible open={altasIsOpen} onOpenChange={setAltasIsOpen}>
+    {/*<pre>{getUserName()}</pre>
+    <Collapsible open={altasIsOpen} onOpenChange={setAltasIsOpen}>
     <Card className="w-full border-[#ABB7F2]">
           <CardHeader>
             <CardTitle className="text-[#141D86]">

@@ -13,6 +13,10 @@ export class RoleQueryDto extends RequestPaginationDto {
   @IsString()
   @IsOptional()
   id?: number
+  @ApiProperty({ description: 'Dummy filter', required: false })
+  @IsString()
+  @IsOptional()
+  descriptionLike?: string;
 }
 
 export class RolePaginationDto extends PaginationDto<Role> {

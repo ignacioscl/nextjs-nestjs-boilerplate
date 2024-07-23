@@ -1,4 +1,4 @@
-export default class Role {
+export default class RoleDto {
     id:number;
     description: string;
   }
