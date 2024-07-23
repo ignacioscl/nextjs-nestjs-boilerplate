@@ -143,7 +143,12 @@ export function RolesTablePaginated() {
   React.useEffect(() => {
     console.log(dataQuery.data)
   },[dataQuery])
-
+  React.useEffect(() => {
+    if (error) {
+      console.log(error)
+    }
+    
+  },[error])
   const table = useReactTable({
     data:dataQuery.data?.data ?? defaultData,
     columns,

@@ -61,7 +61,7 @@ export function useApiRequest<T, Q>(urlEnum: UrlEnum): UseApiRequest<T, Q> {
       }
       setError(error); // Lanza el error para que el llamador pueda manejarlo si es necesario
       setErrorDetail({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
-      return {data: [],...pagination,total:0} as any
+      return {data: [],...pagination,total:0,error:error?.response?.data} as any
     }
   };
   const getCustom = async (path:string,pagination?: PaginationState, query?: Q): Promise<PaginationDto<T>> => {
@@ -72,44 +72,112 @@ export function useApiRequest<T, Q>(urlEnum: UrlEnum): UseApiRequest<T, Q> {
     };
 
     const queryString = qs.stringify(queryParams, { addQueryPrefix: true });
-    const { data } = await axios.get(`${url}${path}${queryString}`);
-    return data;
+    try {
+      const { data } = await axios.get(`${url}${path}${queryString}`);
+      return data;
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        await signIn("keycloak"); // Redirige al usuario a la página de inicio de sesión
+      }
+      setError(error); // Lanza el error para que el llamador pueda manejarlo si es necesario
+      setErrorDetail({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
+      return {data: [],...pagination,total:0,error:error?.response?.data} as any
+    }
+    
   };
   const getOne = async (id: number): Promise<T> => {
-    const { data } = await axios.get(`${url}/${id}`);
-    return data;
+    try {
+      const { data } = await axios.get(`${url}/${id}`);
+      return data;
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        await signIn("keycloak"); // Redirige al usuario a la página de inicio de sesión
+      }
+      setError(error); // Lanza el error para que el llamador pueda manejarlo si es necesario
+      setErrorDetail({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
+      return {data: [],...pagination,total:0,error:error?.response?.data} as any
+    }
+    
   };
 
   const create = async (payload: T): Promise<T> => {
-    const { data } = await axios.post(`${url}`, payload);
-    return data;
+    try {
+      const { data } = await axios.post(`${url}`, payload);
+      return data;
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        await signIn("keycloak"); // Redirige al usuario a la página de inicio de sesión
+      }
+      setError(error); // Lanza el error para que el llamador pueda manejarlo si es necesario
+      setErrorDetail({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
+      return {data: [],...pagination,total:0,error:error?.response?.data} as any
+    }
   };
 
   const update = async (id: number, payload: T): Promise<void> => {
-    await axios.put(`${url}/${id}`, payload);
+    try {
+      await axios.put(`${url}/${id}`, payload);
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        await signIn("keycloak"); // Redirige al usuario a la página de inicio de sesión
+      }
+      setError(error); // Lanza el error para que el llamador pueda manejarlo si es necesario
+      setErrorDetail({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
+      //return {data: [],...pagination,total:0} as any
+    }
+    
   };
 
   const updateCustom = async (queryString: Q, payload: T): Promise<void> => {
     const queryStringFormatted = qs.stringify(queryString, { addQueryPrefix: true });
-    await axios.put(`${url}${queryStringFormatted}`, payload);
+    try {
+      await axios.put(`${url}${queryStringFormatted}`, payload);
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        await signIn("keycloak"); // Redirige al usuario a la página de inicio de sesión
+      }
+      setError(error); // Lanza el error para que el llamador pueda manejarlo si es necesario
+      setErrorDetail({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
+      //return {data: [],...pagination,total:0,error:error?.response?.data} as any
+    }
+    
   };
 
   const deleteItem = async (id: number): Promise<void> => {
-    await axios.delete(`${url}/${id}`);
+    try {
+      await axios.delete(`${url}/${id}`);
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        await signIn("keycloak"); // Redirige al usuario a la página de inicio de sesión
+      }
+      setError(error); // Lanza el error para que el llamador pueda manejarlo si es necesario
+      setErrorDetail({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
+      //return {data: [],...pagination,total:0,error:error?.response?.data} as any
+    }
+    
   };
 
   const deleteCustom = async (queryString: Q): Promise<void> => {
     const queryStringFormatted = qs.stringify(queryString, { addQueryPrefix: true });
-    await axios.delete(`${url}${queryStringFormatted}`);
+    try {
+      await axios.delete(`${url}${queryStringFormatted}`);
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        await signIn("keycloak"); // Redirige al usuario a la página de inicio de sesión
+      }
+      setError(error); // Lanza el error para que el llamador pueda manejarlo si es necesario
+      setErrorDetail({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
+      //return {data: [],...pagination,total:0,error:error?.response?.data} as any
+    }
+    
   };
+  let previousQuery: any;
 
+  function hasQueryChanged(currentQuery: any): boolean {
+    const isChanged = JSON.stringify(currentQuery) !== JSON.stringify(previousQuery);
+    previousQuery = currentQuery;
+    return isChanged;
+  }
   return { getAll, getOne, create, update, updateCustom, deleteItem, deleteCustom ,getCustom,error,errorDetail,setPagination,pagination};
 }
 
-let previousQuery: any;
-
-export function hasQueryChanged(currentQuery: any): boolean {
-  const isChanged = JSON.stringify(currentQuery) !== JSON.stringify(previousQuery);
-  previousQuery = currentQuery;
-  return isChanged;
-}
