@@ -128,7 +128,7 @@ export function RolesTablePaginated() {
   )
   const [roleQuery,setRoleQuery] = React.useState<RoleQueryDto>({descriptionLike:""});
 
-  const { getAll, getOne: getById } = useApiRequest<RoleDto,RoleQueryDto>(UrlEnum.ROLE);
+  const { getAll, getOne } = useApiRequest<RoleDto,RoleQueryDto>(UrlEnum.ROLE);
   
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
