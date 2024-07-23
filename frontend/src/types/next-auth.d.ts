@@ -8,6 +8,7 @@ declare module "next-auth" {
     accessToken?: string
     error?: string
     expiresAt?: number
+    idToken?: string
     refreshToken?: string
     //roles?: string[] ;
     user?: any

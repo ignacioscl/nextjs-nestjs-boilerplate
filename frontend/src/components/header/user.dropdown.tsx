@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link';
-import { SignIn } from '../auth-components';
+import { SignIn, SignOut } from '../auth-components';
 import { useSessionUserHook } from '@lib/hooks/use.session.user.hook';
 
 
@@ -35,7 +35,8 @@ const UserDropdown = () => {
             {item.text}
           </Link>
         ))}
-        <SignIn provider="keycloak" className="w-full text-left block rounded px-4 py-2 text-sm font-medium text-body-color hover:bg-gray-2 hover:text-primary dark:text-dark-6 dark:hover:bg-dark"/>
+        {!isLogued() && <SignIn provider="keycloak" className="w-full text-left block rounded px-4 py-2 text-sm font-medium text-body-color hover:bg-gray-2 hover:text-primary dark:text-dark-6 dark:hover:bg-dark"/>}
+        {isLogued() && <SignOut provider="keycloak" className="w-full text-left block rounded px-4 py-2 text-sm font-medium text-body-color hover:bg-gray-2 hover:text-primary dark:text-dark-6 dark:hover:bg-dark"/>}
       </div>
     </div>
   );

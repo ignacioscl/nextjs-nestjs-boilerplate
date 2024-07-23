@@ -128,16 +128,13 @@ export function RolesTablePaginated() {
   )
   const [roleQuery,setRoleQuery] = React.useState<RoleQueryDto>({descriptionLike:""});
 
-  const { getAll, getOne } = useApiRequest<RoleDto,RoleQueryDto>(UrlEnum.ROLE);
+  const { getAll, getOne,error,errorDetail,pagination,setPagination } = useApiRequest<RoleDto,RoleQueryDto>(UrlEnum.ROLE);
   
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
-  const [pagination, setPagination] = React.useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 10,
-  })
-  const defaultData = React.useMemo(() => [], [])
   
+  const defaultData = React.useMemo(() => [], [])
+  //TODO: manejar el loading con useQuery
   const dataQuery = useQuery<PaginationDto<RoleDto>>({
     queryKey: ['data', pagination,roleQuery],
     queryFn: () => getAll(pagination,roleQuery),
@@ -172,6 +169,10 @@ export function RolesTablePaginated() {
     debugTable: true,
   })
 
+  if (error) {
+    //TODO: lanzar error con toast
+    return <div><pre>{JSON.stringify(error.response.data, null, 2)}</pre><pre>{errorDetail?.message}<br/>{errorDetail?.validationErrors}<br></br>{errorDetail?.status}</pre></div>
+  }
   return (
     <div className="w-full">
       <div className="flex items-center py-4">

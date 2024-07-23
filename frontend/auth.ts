@@ -7,6 +7,7 @@ import type { NextAuthConfig } from "next-auth"
 import { JWT } from "next-auth/jwt"
 import UserJwt from "./src/types/user/user.jwt" 
 import { decod, decodeToken } from "./src/lib/utils"
+import axios, { AxiosError } from "axios"
 
 const config = {
   theme: { logo: "https://authjs.dev/img/logo-sm.png" },
@@ -90,6 +91,7 @@ const config = {
       if (token?.accessToken) {
         session.accessToken = token.accessToken as any
         session.expiresAt = token.expiresAt as any
+        session.idToken = token.idToken as any
         session.refreshToken = token.refreshToken as any
         session.user  = decodeToken(token.accessToken) as UserJwt;
         //session.roles = token.roles as string[];  // Add roles to the session
@@ -99,6 +101,9 @@ const config = {
   },
   experimental: {
     enableWebAuthn: true,
+  },
+  events: {
+      signOut: ({ session, token } : any) => doFinalSignoutHandshake(token)
   },
   debug: false//process.env.NODE_ENV !== "production",
 } satisfies NextAuthConfig
@@ -122,7 +127,24 @@ declare module "next-auth/jwt" {
   }
 }
 
+async function doFinalSignoutHandshake(jwt: JWT) {
+  const { provider, idToken } = jwt;
+console.log(jwt)
+  //if (provider == keycloak.id) {
+      try {
+          // Add the id_token_hint to the query string
+          const params = new URLSearchParams();
+          params.append('id_token_hint', idToken as string);
+          const { status, statusText } = await axios.get(`${process.env.AUTH_KEYCLOAK_ISSUER}/protocol/openid-connect/logout?${params.toString()}`);
 
+          // The response body should contain a confirmation that the user has been logged out
+          console.log("Completed post-logout handshake", status, statusText);
+      }
+      catch (e: any) {
+          console.error("Unable to perform post-logout handshake", (e as AxiosError)?.code || e)
+      }
+//}
+}
 
 async function  requestRefreshOfAccessToken(token: JWT) {
   // Asegúrate de que las variables de entorno no sean undefined

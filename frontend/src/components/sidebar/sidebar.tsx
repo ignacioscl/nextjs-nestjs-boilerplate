@@ -1,15 +1,22 @@
+import { useSessionUserHook } from '@lib/hooks/use.session.user.hook';
 import Link from 'next/link';
 import PropTypes from "prop-types";
 import { useState } from "react";
+import RolesEnum from '../../enums/roles.enum';
 
 const navList = [
   {
     link: "/",
     text: "Home",
+    roles: [RolesEnum.ADMIN]
   },
   {
-    link: "#",
-    text: "Dashboard",
+    divider: true,
+  },
+  {
+    link: "/roles",
+    text: "Roles",
+    roles: [RolesEnum.ADMIN]
   },
   {
     link: "#",
@@ -28,7 +35,7 @@ const navList = [
         text: "Dropdown Three",
       },
     ],
-  },
+  },/*
   {
     link: "/",
     text: "Messages",
@@ -63,7 +70,7 @@ const navList = [
   {
     link: "/",
     text: "Log out",
-  },
+  },*/
 ];
 
 interface SidebarProps {
@@ -73,7 +80,7 @@ interface SidebarProps {
   
   const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
     const [openDropDown, setOpenDropDown] = useState<boolean>(false);
-
+    const {user,isLogued} = useSessionUserHook();
 
   const handleSidebarToggle = () => {
     setSidebarOpen(!sidebarOpen);
@@ -82,7 +89,9 @@ interface SidebarProps {
   const handleDropDownToggle = () => {
     setOpenDropDown(!openDropDown);
   };
-
+  if (!isLogued()) {
+    return <></>
+  }
   return (
     <>
       <div
@@ -102,7 +111,17 @@ interface SidebarProps {
 
           <nav>
             <ul>
-              {navList.map((item, index) =>
+              {navList.filter(t => {
+                const userRoles = user.realm_access.roles;
+                const requiredRoles = t.roles;
+                console.log(requiredRoles,userRoles);
+                const hasSome = requiredRoles?.some(role => userRoles.includes(role));
+                
+                if (hasSome) {
+                  return true;
+                }
+                return false;
+              }).map((item, index) =>
                 item?.divider ? (
                   <li key={index}>
                     <div className="mx-9 my-5 h-px bg-stroke dark:bg-dark-3"></div>
