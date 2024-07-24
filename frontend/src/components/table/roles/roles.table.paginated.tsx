@@ -133,7 +133,16 @@ export function RolesTablePaginated() {
   const openParam = searchParams.get('open')
   const [roleQuery,setRoleQuery] = React.useState<RoleQueryDto>({descriptionLike:""});
   
-  const { getAll, getOne,error,errorDetail,pagination,setPagination } = useApiRequest<RoleDto,RoleQueryDto>(UrlEnum.ROLE);
+  
+  const { getAll, getOne,update,create,error,errorDetail,pagination,setPagination } = useApiRequest<RoleDto,RoleQueryDto>(UrlEnum.ROLE);
+  const submit = async () => {
+    //const obj = await create({description:""} as any);
+    //obj.id
+
+    //const list = await getAll();
+
+    //const updated = await update(1,{description:"pepe"} as any);
+  }
   
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
@@ -150,7 +159,8 @@ export function RolesTablePaginated() {
   },[dataQuery])
   React.useEffect(() => {
     if (error) {
-      console.log(error)
+      //todo:toast
+      console.log(error,errorDetail?.validationErrors)
     }
     
   },[error])
