@@ -3,6 +3,8 @@ import Link from 'next/link';
 import PropTypes from "prop-types";
 import { useState } from "react";
 import RolesEnum from '../../enums/roles.enum';
+import { usePathname, useRouter } from 'next/navigation';
+import { cn } from '@lib/utils';
 
 const navList = [
   {
@@ -79,6 +81,7 @@ interface SidebarProps {
   }
   
   const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
+    const pathname = usePathname()
     const [openDropDown, setOpenDropDown] = useState<boolean>(false);
     const {user,isLogued} = useSessionUserHook();
 
@@ -114,7 +117,7 @@ interface SidebarProps {
               {navList.filter(t => {
                 const userRoles = user.realm_access.roles;
                 const requiredRoles = t.roles;
-                console.log(requiredRoles,userRoles);
+                //console.log(requiredRoles,userRoles);
                 const hasSome = requiredRoles?.some(role => userRoles.includes(role));
                 
                 if (hasSome) {
@@ -176,7 +179,13 @@ interface SidebarProps {
                   <li key={index}>
                     <Link
                       href={item.link as any}
-                      className="relative flex items-center border-r-4 border-transparent py-[10px] pl-9 pr-10 text-base font-medium text-body-color duration-200 hover:border-primary hover:bg-primary/5 dark:text-dark-6"
+                      className={cn(
+                        'relative flex items-center border-r-4 py-[10px] pl-9 pr-10 text-base font-medium text-body-color duration-200 hover:border-primary hover:bg-primary/5 dark:text-dark-6',
+                        {
+                          'border-primary bg-primary/5': (pathname === item.link),
+                          'border-transparent': !(pathname === item.link),
+                        }
+                      )}
                     >
                       {item.text}
                     </Link>

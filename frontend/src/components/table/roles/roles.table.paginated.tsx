@@ -1,6 +1,8 @@
 "use client"
 
 import * as React from "react"
+import { useRouter } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import {
   CaretSortIcon,
   ChevronDownIcon,
@@ -24,7 +26,6 @@ import {
 
 } from '@tanstack/react-query'
 import { Button } from "@components/ui/button"
-import { Checkbox } from "@components/ui/checkbox"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -50,7 +51,8 @@ import ApiRequest from "@lib/fetch/api.request"
 import { PaginationDto } from "@lib/pagination/pagination.dto"
 import RoleQueryDto from "@localTypes/role/role.query.dto"
 import { useApiRequest } from "@lib/hooks/api.request"
-import urlFetch, { UrlEnum } from "@lib/url.fetch/url.fetch"
+import { UrlEnum } from "@lib/url.fetch/url.fetch"
+
 
 
 
@@ -66,7 +68,7 @@ const data: RoleDto[] = [
 ]
 
 
-export const columns: ColumnDef<RoleDto>[] = [
+const columns: ColumnDef<RoleDto>[] = [
   
   {
     accessorKey: "id",
@@ -94,8 +96,8 @@ export const columns: ColumnDef<RoleDto>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original
-
+      const role = row.original
+      const router = useRouter()
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -107,12 +109,12 @@ export const columns: ColumnDef<RoleDto>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id as any)}
+              onClick={() => navigator.clipboard.writeText(role.id as any)}
             >
               Copy payment ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => {router.push('roles/role/' + role.id)}}>Open modal</DropdownMenuItem>
             <DropdownMenuItem>View payment details</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -126,8 +128,11 @@ export function RolesTablePaginated() {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
+  const searchParams = useSearchParams()
+ 
+  const openParam = searchParams.get('open')
   const [roleQuery,setRoleQuery] = React.useState<RoleQueryDto>({descriptionLike:""});
-
+  
   const { getAll, getOne,error,errorDetail,pagination,setPagination } = useApiRequest<RoleDto,RoleQueryDto>(UrlEnum.ROLE);
   
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
@@ -149,6 +154,8 @@ export function RolesTablePaginated() {
     }
     
   },[error])
+
+  
   const table = useReactTable({
     data:dataQuery.data?.data ?? defaultData,
     columns,

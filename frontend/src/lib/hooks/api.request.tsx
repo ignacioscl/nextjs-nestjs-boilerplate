@@ -4,7 +4,7 @@ import { PaginationDto } from "@lib/pagination/pagination.dto";
 import { PaginationState } from "@tanstack/react-table";
 import urlFetch, { UrlEnum } from '@lib/url.fetch/url.fetch';
 import { signIn } from 'next-auth/react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 interface UseApiRequest<T, Q> {
   getAll: (pagination?: PaginationState, query?: Q) => Promise<PaginationDto<T>>;
@@ -35,14 +35,14 @@ export function useApiRequest<T, Q>(urlEnum: UrlEnum): UseApiRequest<T, Q> {
   const [error,setError] = useState();
   const [errorDetail,setErrorDetail] = useState<ApiError>();
   const url = getUrl();
-
+const ref = useRef<Q | undefined>();
   const getAll = async (pagination?: PaginationState, query?: Q): Promise<PaginationDto<T>> => {
     let queryParams = {
       page: pagination?.pageIndex,
       pageSize: pagination?.pageSize,
       ...query
     };
-    if (hasQueryChanged(query)) {
+    if (query && hasQueryChanged(query)) {
       setPagination({ pageIndex: 0, pageSize: 10 });
       queryParams = {
          page: 0, pageSize: 10 ,
@@ -171,13 +171,13 @@ export function useApiRequest<T, Q>(urlEnum: UrlEnum): UseApiRequest<T, Q> {
     }
     
   };
-  let previousQuery: any;
+  
 
-  function hasQueryChanged(currentQuery: any): boolean {
-    const isChanged = JSON.stringify(currentQuery) !== JSON.stringify(previousQuery);
-    previousQuery = currentQuery;
+  function hasQueryChanged(currentQuery: Q): boolean {
+    delete (currentQuery as any).page
+    const isChanged = JSON.stringify(currentQuery) !== JSON.stringify(ref.current);
+    ref.current = currentQuery;
     return isChanged;
   }
   return { getAll, getOne, create, update, updateCustom, deleteItem, deleteCustom ,getCustom,error,errorDetail,setPagination,pagination};
 }
-
