@@ -49,6 +49,7 @@ export class RoleController {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     //const { user } = request
     // If necessary, have the session Role
+    //throw new Error('Method not implemented.')
     return this.getService().fetch(query)
   }
 
@@ -63,6 +64,7 @@ export class RoleController {
   @ApiBody({ type: RoleDto, required: true })
   @ApiCreatedResponse({ type: Role, description: 'Role created' })
   async save(@Body() entity: RoleDto) {
+    throw new Error('Method not implemented.');
     return this.getService().create(entity)
   }
 

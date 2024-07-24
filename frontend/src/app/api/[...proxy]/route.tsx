@@ -24,15 +24,58 @@ async function handler(request: NextRequest) {
     process.env.BACKEND_BASE_URL || ''
 
   let url = request.nextUrl.href.replace(request.nextUrl.origin, backendUrl)
-  /*console.log("url" + url)
-  console.log("headers",headers )*/
-  let result = await fetch(url, {
+  console.log("url" + url)
+  //console.log("headers",headers )
+  const options = {
     method: request.method, // Ensures the same method is used for the proxy request
     headers,
     body: request.method !== 'GET' && request.method !== 'HEAD' ? request.body : undefined, // Only include body for methods that support it
-  })
+    duplex: 'half',
+  }
 
-  return stripContentEncoding(result)
+    
+    try {
+      let result = await fetch(url, options);
+      return stripContentEncoding(result);
+    } catch (e) {
+      console.log("eeeoe",e);
+  
+      // Verificar si el error es un TypeError y si el mensaje contiene "fetch failed"
+      if (e instanceof TypeError && e.message.includes("fetch failed")) {
+        const errorMessage = "Network Error: Failed to fetch";
+        
+        const err = {
+          statusCode: 500,
+          path: request.nextUrl.origin,
+          message: errorMessage,
+          validationErrors: null,
+          body: request.method !== 'GET' && request.method !== 'HEAD' ? request.body : undefined,
+          method: request.method,
+        };
+  
+        // Devuelve el error customizado
+        return new Response(JSON.stringify(err), { status: 500, headers: { 'Content-Type': 'application/json' } });
+      } else if (e instanceof Response) {
+        // Si es una instancia de Response, intenta devolver el mismo response del fetch
+        return stripContentEncoding(e);
+      } else {
+        // Para cualquier otro tipo de error, envuelve el error y lo devuelve como un error del servidor
+        const err = {
+          statusCode: 500,
+          path: request.nextUrl.origin,
+          message: "Proxy Error: " + e.message,
+          validationErrors: null,
+          body: request.method !== 'GET' && request.method !== 'HEAD' ? request.body : undefined,
+          method: request.method,
+        };
+  
+        return new Response(JSON.stringify(err), { status: 500, headers: { 'Content-Type': 'application/json' } });
+      }
+    }
+
+  
+
+  
 }
 
 export const dynamic = "force-dynamic"

@@ -12,8 +12,7 @@ const urlFetch = (url:UrlEnum) => {
 
 export enum UrlEnum {
     ROLE = '/api/roles',
-    TEST = "/api/test",
-    UNIT = '/api-payroll/units'
+    TEST = "/api/test"
 }
 
 export default urlFetch;

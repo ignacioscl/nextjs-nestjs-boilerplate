@@ -5,6 +5,7 @@ import { PaginationState } from "@tanstack/react-table";
 import urlFetch, { UrlEnum } from '@lib/url.fetch/url.fetch';
 import { signIn } from 'next-auth/react';
 import { useRef, useState } from 'react';
+import CustomError from '@localTypes/errors/custom.error';
 
 interface UseApiRequest<T, Q> {
   getAll: (pagination?: PaginationState, query?: Q) => Promise<PaginationDto<T>>;
@@ -61,7 +62,8 @@ const ref = useRef<Q | undefined>();
       }
       setError(error); // Lanza el error para que el llamador pueda manejarlo si es necesario
       setErrorDetail({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
-      return {data: [],...pagination,total:0,error:error?.response?.data} as any
+      //return {data: [],...pagination,total:0,error:error?.response?.data} as any
+      throw new CustomError({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
     }
   };
   const getCustom = async (path:string,pagination?: PaginationState, query?: Q): Promise<PaginationDto<T>> => {
@@ -81,7 +83,8 @@ const ref = useRef<Q | undefined>();
       }
       setError(error); // Lanza el error para que el llamador pueda manejarlo si es necesario
       setErrorDetail({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
-      return {data: [],...pagination,total:0,error:error?.response?.data} as any
+      //return {data: [],...pagination,total:0,error:error?.response?.data} as any
+      throw new CustomError({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
     }
     
   };
@@ -95,7 +98,8 @@ const ref = useRef<Q | undefined>();
       }
       setError(error); // Lanza el error para que el llamador pueda manejarlo si es necesario
       setErrorDetail({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
-      return {data: [],...pagination,total:0,error:error?.response?.data} as any
+      //return {data: [],...pagination,total:0,error:error?.response?.data} as any
+      throw new CustomError({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
     }
     
   };
@@ -110,7 +114,7 @@ const ref = useRef<Q | undefined>();
       }
       setError(error); // Lanza el error para que el llamador pueda manejarlo si es necesario
       setErrorDetail({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
-      return {data: [],...pagination,total:0,error:error?.response?.data} as any
+      throw new CustomError({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
     }
   };
 
@@ -123,7 +127,7 @@ const ref = useRef<Q | undefined>();
       }
       setError(error); // Lanza el error para que el llamador pueda manejarlo si es necesario
       setErrorDetail({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
-      //return {data: [],...pagination,total:0} as any
+      throw new CustomError({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
     }
     
   };
@@ -138,7 +142,7 @@ const ref = useRef<Q | undefined>();
       }
       setError(error); // Lanza el error para que el llamador pueda manejarlo si es necesario
       setErrorDetail({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
-      //return {data: [],...pagination,total:0,error:error?.response?.data} as any
+      throw new CustomError({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
     }
     
   };
@@ -152,7 +156,7 @@ const ref = useRef<Q | undefined>();
       }
       setError(error); // Lanza el error para que el llamador pueda manejarlo si es necesario
       setErrorDetail({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
-      //return {data: [],...pagination,total:0,error:error?.response?.data} as any
+      throw new CustomError({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
     }
     
   };
@@ -167,7 +171,7 @@ const ref = useRef<Q | undefined>();
       }
       setError(error); // Lanza el error para que el llamador pueda manejarlo si es necesario
       setErrorDetail({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
-      //return {data: [],...pagination,total:0,error:error?.response?.data} as any
+      throw new CustomError({message: error?.response?.data?.message, status: error?.response?.status, validationErrors: error?.response?.data?.validationErrors})
     }
     
   };

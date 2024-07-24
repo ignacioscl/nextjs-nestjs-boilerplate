@@ -44,7 +44,7 @@ import {
   TableHeader,
   TableRow,
 } from "@components/ui/table"
-import RoleDto from "../../../types/role/role"
+import {RoleDto, RoleSchema } from "../../../types/role/role"
 import { useQuery } from "react-query"
 import {fetchPaginated} from "@lib/fetch/fetch"
 import ApiRequest from "@lib/fetch/api.request"
@@ -52,6 +52,7 @@ import { PaginationDto } from "@lib/pagination/pagination.dto"
 import RoleQueryDto from "@localTypes/role/role.query.dto"
 import { useApiRequest } from "@lib/hooks/api.request"
 import { UrlEnum } from "@lib/url.fetch/url.fetch"
+import { toast, useToast } from "@components/ui/use-toast"
 
 
 
@@ -124,6 +125,7 @@ const columns: ColumnDef<RoleDto>[] = [
 ]
 
 export function RolesTablePaginated() {
+  const { toast }     = useToast();
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -159,8 +161,7 @@ export function RolesTablePaginated() {
   },[dataQuery])
   React.useEffect(() => {
     if (error) {
-      //todo:toast
-      console.log(error,errorDetail?.validationErrors)
+      console.log(error)
     }
     
   },[error])
@@ -191,10 +192,23 @@ export function RolesTablePaginated() {
     debugTable: true,
   })
 
-  if (error) {
-    //TODO: lanzar error con toast
-    return <div><pre>{JSON.stringify(error.response.data, null, 2)}</pre><pre>{errorDetail?.message}<br/>{errorDetail?.validationErrors}<br></br>{errorDetail?.status}</pre></div>
-  }
+  React.useEffect(() => {
+    if (errorDetail) {
+      toast({
+        title: errorDetail.message,
+        duration:2000,
+        variant: "destructive",
+        /*description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+            </pre>
+        ),*/
+        })
+      //TODO: lanzar error con toast
+      //return <div><pre>{JSON.stringify(error.response.data, null, 2)}</pre><pre>{errorDetail?.message}<br/>{errorDetail?.validationErrors}<br></br>{errorDetail?.status}</pre></div>
+    }
+  },[errorDetail])
+  
   return (
     <div className="w-full">
       <div className="flex items-center py-4">

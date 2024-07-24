@@ -6,6 +6,7 @@ import LayoutMain from "@components/layout/layout.main";
 import Head from "next/head";
 import { auth } from "../../auth";
 import { Session } from "next-auth";
+import { Toaster } from "@components/ui/toaster";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -42,6 +43,7 @@ export default async function RootLayout({
       <body className={inter.className}>
         <LayoutMain session={session}>
           {children}
+          <Toaster />
         </LayoutMain>
         <DarkModeToggle />
         
