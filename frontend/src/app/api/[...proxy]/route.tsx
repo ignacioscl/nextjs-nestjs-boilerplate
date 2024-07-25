@@ -38,7 +38,7 @@ async function handler(request: NextRequest) {
       let result = await fetch(url, options);
       return stripContentEncoding(result);
     } catch (e) {
-      console.log("eeeoe",e);
+      
   
       // Verificar si el error es un TypeError y si el mensaje contiene "fetch failed"
       if (e instanceof TypeError && e.message.includes("fetch failed")) {
@@ -63,7 +63,7 @@ async function handler(request: NextRequest) {
         const err = {
           statusCode: 500,
           path: request.nextUrl.origin,
-          message: "Proxy Error: " + e.message,
+          message: "Proxy Error: " + (e as any).message,
           validationErrors: null,
           body: request.method !== 'GET' && request.method !== 'HEAD' ? request.body : undefined,
           method: request.method,
